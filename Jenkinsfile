@@ -19,7 +19,7 @@ pipeline {
                 script {
                     echo "Building project..."
 
-                    sh """
+                    sh '''
                     # Create necessary directories in 'build'
                     mkdir -p ${BUILD_DIR}/css ${BUILD_DIR}/js
 
@@ -27,7 +27,7 @@ pipeline {
                     echo Minifying CSS files...
                     if ls css/*.css 2>/dev/null; then
                       for i in css/*.css; do
-                        cat "\$i" > "${BUILD_DIR}/css/$(basename "\$i" .css).min.css"
+                        cat "$i" > "${BUILD_DIR}/css/$(basename "$i" .css).min.css"
                       done
                     fi
 
@@ -35,14 +35,14 @@ pipeline {
                     echo Minifying JS files...
                     if ls js/*.js 2>/dev/null; then
                       for i in js/*.js; do
-                        cat "\$i" > "${BUILD_DIR}/js/$(basename "\$i" .js).min.js"
+                        cat "$i" > "${BUILD_DIR}/js/$(basename "$i" .js).min.js"
                       done
                     fi
 
                     # Copy HTML files to the build directory
                     echo Copying HTML files...
                     cp -v *.html ${BUILD_DIR}/ || true
-                    """
+                    '''
                 }
             }
         }
@@ -52,12 +52,12 @@ pipeline {
                 script {
                     echo "Testing project..."
 
-                    sh """
+                    sh '''
                     # Validate HTML files
                     echo Validating HTML files...
                     if ls ${BUILD_DIR}/*.html 2>/dev/null; then
                       for i in ${BUILD_DIR}/*.html; do
-                        echo Validating "\$i"...
+                        echo Validating "$i"...
                       done
                     fi
 
@@ -65,7 +65,7 @@ pipeline {
                     echo Validating CSS files...
                     if ls ${BUILD_DIR}/css/*.min.css 2>/dev/null; then
                       for i in ${BUILD_DIR}/css/*.min.css; do
-                        echo Validating "\$i"...
+                        echo Validating "$i"...
                       done
                     fi
 
@@ -73,10 +73,10 @@ pipeline {
                     echo Validating JS files...
                     if ls ${BUILD_DIR}/js/*.min.js 2>/dev/null; then
                       for i in ${BUILD_DIR}/js/*.min.js; do
-                        echo Validating "\$i"...
+                        echo Validating "$i"...
                       done
                     fi
-                    """
+                    '''
                 }
             }
         }
@@ -86,7 +86,7 @@ pipeline {
                 script {
                     echo "Deploying project..."
 
-                    sh """
+                    sh '''
                     # Prepare deployment directory
                     mkdir -p ${DEPLOY_DIR}
 
@@ -95,7 +95,7 @@ pipeline {
                     cp -r ${BUILD_DIR}/* ${DEPLOY_DIR}/
 
                     echo Deployment complete. Files are ready in '${DEPLOY_DIR}'.
-                    """
+                    '''
                 }
             }
         }
